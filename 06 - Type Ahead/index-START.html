@@ -17,6 +17,31 @@
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
+  const cities = [];
+
+  fetch(endpoint)
+    .then(raw => raw.json())
+    .then(data => cities.push(...data))
+
+  const search = document.querySelector('.search')
+  const list = document.querySelector('.suggestions');
+
+  function filterCities () {
+    let filtered = cities.filter(city => city.city.toLowerCase().includes(this.value.toLowerCase()) || city.state.toLowerCase().includes(this.value.toLowerCase()));
+
+    let html = filtered.map(city => {
+      const regex = new RegExp(this.value, 'gi');
+      const cityName = city.city.replace(regex, `<span class="hl">${this.value}</span>`);
+      const stateName = city.state.replace(regex,`<span class="hl">${this.value}</span>`)
+
+      return `<li><span>${cityName}, ${stateName}</span></li>`
+    }).join('');
+    list.innerHTML = html;
+  }
+
+  search.addEventListener('change', filterCities);
+  search.addEventListener('keyup', filterCities);
+
 </script>
 </body>
 </html>

@@ -96,6 +96,39 @@
   </div>
 
 <script>
+  let hold = false;
+  let checked = null;
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Shift') {
+      hold = true;
+    }
+  })
+  document.addEventListener('keyup', (e) => {
+    if(e.key === 'Shift') {
+      hold = false;
+    }
+  })
+  document.querySelectorAll('input').forEach(element => {
+    element.addEventListener('click', (e) => {
+      let index = (Array.prototype.indexOf.call(e.target.parentElement.parentElement.children, e.target.parentElement))
+
+      if(!hold) {
+        checked = index;
+      } else {
+        if(index < checked){
+          for(let i = index; i < checked; i++){
+            e.target.parentElement.parentElement.children[i].children[0].checked = e.target.checked;
+          }
+        } else {
+          for(let i = index; i > checked; i--){
+            e.target.parentElement.parentElement.children[i].children[0].checked = e.target.checked;
+          }
+        }
+      }
+    })
+  })
+
+
 </script>
 </body>
 </html>
